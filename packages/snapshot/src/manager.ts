@@ -62,26 +62,31 @@ export function emptySummary(options: Omit<SnapshotStateOptions, 'snapshotEnviro
 }
 
 export function addSnapshotResult(summary: SnapshotSummary, result: SnapshotResult): void {
-  if (result.added)
-    summary.filesAdded++
-  if (result.fileDeleted)
-    summary.filesRemoved++
-  if (result.unmatched)
-    summary.filesUnmatched++
-  if (result.updated)
-    summary.filesUpdated++
-
-  summary.added += result.added
-  summary.matched += result.matched
-  summary.unchecked += result.unchecked
-  if (result.uncheckedKeys && result.uncheckedKeys.length > 0) {
-    summary.uncheckedKeysByFile.push({
-      filePath: result.filepath,
-      keys: result.uncheckedKeys,
-    })
+  if (result.added) {
+    summary.filesAdded += result.added;
+    summary.added += result.added;
+  }
+  if (result.filesDeleted) {
+    summary.filesRemoved += result.filesDeleted;
+  }
+  if (result.unmatched) {
+    summary.filesUnmatched += result.unmatched;
+    summary.unmatched += result.unmatched;
+  }
+  if (result.updated) {
+    summary.filesUpdated += result.updated;
+    summary.updated += result.updated;
   }
 
-  summary.unmatched += result.unmatched
-  summary.updated += result.updated
-  summary.total += result.added + result.matched + result.unmatched + result.updated
+  summary.matched += result.matched;
+  summary.unchecked += result.unchecked;
+
+  if (result.uncheckedKeys && result.uncheckedKeys.length > 0) {
+    summary.uncheckedKeysByFile.push({
+      filePath: result.filepath, // Assuming filepath is the correct property name
+      keys: result.uncheckedKeys,
+    });
+  }
+
+  summary.total += result.added + result.matched + result.unmatched + result.updated;
 }
